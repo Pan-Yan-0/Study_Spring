@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.springframework.transaction.annotation.Propagation.SUPPORTS;
+
 @Service
 public class DeptServiceImpl implements DeptService {
 
@@ -24,15 +26,19 @@ public class DeptServiceImpl implements DeptService {
         return deptMapper.list();
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(rollbackFor = Exception.class,propagation =SUPPORTS)
     @Override
     public void delete(Integer id) {
-        deptMapper.deleteById(id);  //根据ID删除部门数据
+        try {
+            deptMapper.deleteById(id);  //根据ID删除部门数据
 
-        int i = 1/0;
+            int i = 1/0;
 
 
-        empMapper.deleteByDeptId(id);   //根据部门的id删除部门下的员工
+            empMapper.deleteByDeptId(id);   //根据部门的id删除部门下的员工
+        } finally {
+            //记录日记
+        }
     }
 
     @Override
