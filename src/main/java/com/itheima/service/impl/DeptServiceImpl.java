@@ -1,5 +1,6 @@
 package com.itheima.service.impl;
 
+import com.itheima.aop.MyLog;
 import com.itheima.mapper.DeptMapper;
 import com.itheima.mapper.EmpMapper;
 import com.itheima.pojo.Dept;
@@ -21,11 +22,14 @@ public class DeptServiceImpl implements DeptService {
 
     @Autowired
     private EmpMapper empMapper;
+
+    @MyLog
     @Override
     public List<Dept> list() {
-        return deptMapper.list();
+        List<Dept> list = deptMapper.list();
+        return list;
     }
-
+    @MyLog
     @Transactional(rollbackFor = Exception.class,propagation =SUPPORTS)
     @Override
     public void delete(Integer id) {
